@@ -3,6 +3,12 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from uuid import UUID
 
+
+class NegativeNumberException(Exception):
+    def __int__(self, books_to_return):
+        self.books_to_return = books_to_return
+
+
 app = FastAPI()
 
 class Book(BaseModel):
@@ -27,6 +33,8 @@ class Book(BaseModel):
         }
 
 BOOKS = []
+
+@app.exception_handler()
 
 @app.get("/")
 async def read_all_books(books_to_return: Optional[int] = None):
